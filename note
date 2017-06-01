@@ -1,1 +1,8 @@
+http://www.seleniumhq.org/download/
 
+http://seleniumhq.github.io/selenium/docs/api/java/index.html
+
+UAT环境：UAT,(User Acceptance Test),用户接受度测试 即验收测试，所以UAT环境主要是用来作为客户体验的环境。
+
+(2017.06.01)
+1. 了解jenkins, 学习配置jenkinsfile.
