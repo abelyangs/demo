@@ -1,0 +1,48 @@
+昨天我练习了用CSS（即层叠样式表Cascading Stylesheet） Selector来定位（locate）页面上的元素（Elements）。Selenium官网的Document里极力推荐使用CSS locator，而不是XPath来定位元素，原因是CSS locator比XPath locator速度快，特别是在IE下面（IE没有自己的XPath 解析器(Parser)）。有很多跟Selenium相关的Blog文章都有提到使用CSS Selector的技术。之前我不会CSS Selector，甚至一看到CSS就头疼。但我相信用CSS Selector能非常精准的定位到我想测试的Elements。因为前端开发人员就是用CSS Selector设定页面上每一个元素的样式，无论那个元素的位置有多复杂，他们能定位到，那我也能定位到。
+读一下这个文档就能明白大部分的CSS Selector了
+http://www.w3.org/TR/css3-selectors/
+如果button上有class属性的，如:
+ <button id="ext-eng=1026" class="x-right-button"...>
+可以这样写：
+css=button.x-right-button
+.代表class
+如果class里带的空格，用.来代替空格如：
+<button class="x-btn-text module_picker_icon">...
+可以这样写：
+css=button.x-btn-text.module_picker_icon
+如果想用别的属性值定位，用方括号【属性名=属性值】的方式，如：
+<abbr>Abc<abbr/>
+css=abbr[title="Abc"]
+如果button上有id属性的，如：
+<input id="ag_name" type="text"...>
+可以这样写：
+css=input#ag_name 
+或者直接写 
+css=#ag_name
+#代表id
+但是在实际应该中，如果有元素固定id的，可以直接用id locator,这样写:
+id=ag_name
+这通常是在Form里的input元素， 需要用户填写内容然后提交的部分，也是最简单的部分。
+没有固定id的，通常是由javascript框架自动生成的id如,每次加载页面都会改变的，如：
+<button id="ext-eng-1026" >，下回可能就是<button id="ext-eng-2047">
+这种情况不能使用id属性来定位。
+如果你想定位一个显示OK的Button，但页面上有几个Button，id是自动生成的，class是一样的，我又想用一个简单点的CSS locator的时候，
+<button id="ext-eng-1026" class="x-right-button">OK</button>
+<button id="ext-eng-1027" class="x-right-button">Cancel</button>
+可以这样写： 
+css=button.x-right-button:contains("OK")
+:contains是个Pseudo-class，用冒号开头，括号里是内容。
+Pseudo-classes是CSS提供的伪类，用来访问页面上DOM tree之外的信息，还有Pseudo-elements 用来最精准的定位页面上的某一行文字，甚至某一行文字的第一个字母。我也是昨天头一回听说有这玩意儿，具体可以研究一下css3 selector文档的Chapter 6.6 Pseudo-classes 和 Chapter 7 Pseudo-elements
+基本上用XPath能定位的元素，都能用CSS Selector定位到。
+它两最相似的是这样写： 
+<table><tr><td><div><span>abcd</span><span>1234</span></div></td></tr></table>
+xpath=//table/tr/td/div/span[1]
+css=table>tr>td>div>span:nth-child（1）
+*xpath没在页面上测试过。
+一个非常好的blog，不看可惜了。
+http://saucelabs.com/blog/index.php/2009/10/selenium-tip-of-the-week-start-improving-your-locators/
+综上所述，就是:
+有固定id的用id selector， 
+没有固定id的用css selector。 
+Pseudo-selements ：contains（）很好用。
+会了这几下子，基本上定位就不成问题了
